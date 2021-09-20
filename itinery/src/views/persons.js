@@ -1,0 +1,101 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+
+const Persons = (props) => {
+
+    const [persons, setPersons] = useState([]);
+    const tableStyle = {
+        "border": "1px solid black",
+        "box-boder": "1px solid black",
+        "text-align": "center",
+        "margin-left": "auto",
+        "margin-right": "auto",
+        "width": "2000px",
+        "justify-content": "space-between",
+    };
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/api/itinerays/all")
+            .then((res) => {
+                setPersons(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    const handleDelete = (delId) => {
+        axios
+            .delete("http://localhost:8000/api/itinerays/" + delId)
+            .then((res) => {
+                // It has successfully been deleted from the DATABASE
+                // It is still IN our state, we need to remove it from state.
+                const filteredsetPersons = persons.filter((per) => {
+                    return per._id !== delId;
+                });
+
+                setPersons(filteredsetPersons);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+    };
+
+
+    return (
+        <div>
+            <Link to="/Departments/Contact/new">New Contact</Link>
+            <h2>Deparment Contacts</h2>
+            <div>
+                <table style={tableStyle}>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Department</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                            <th>Schedules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {persons.map((per) => {
+                            return (
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" onClick="" />
+                                    </td>
+                                    <td>{per.department}</td>
+                                    <td>{per.firstName}</td>
+                                    <td>{per.lastName}</td>
+                                    <td>{per.phone}</td>
+                                    <td>{per.email}</td>
+                                    <td>
+                                        <Link to={`/Departments/Contact/${per._id}/edit`}>
+                                            <h4>Edit</h4>
+                                        </Link>
+                                        <button onClick={(e) => {
+                                            handleDelete(per._id)
+                                        }}>Delete</button>
+                                    </td>
+                                    <td>
+                                        <button onClick="">Join Meeting</button>
+                                        <button onClick="">Meeting Reminder</button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+        </div >
+    )
+}
+
+export default Persons;
