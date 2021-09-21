@@ -4,6 +4,7 @@ import Persons from "./views/persons";
 import NewPerson from "./views/NewPerson";
 import Welcome from "./views/welcome";
 import Details from "./views/Details";
+import EditPerson from './views/EditPerson';
 
 function App() {
   return (
@@ -27,13 +28,13 @@ function App() {
           <Details />
         </Route>
 
+        <Route exact path="/Departments/Contacts/:id/edit">
+          <EditPerson />
+        </Route>
         {/*<Route exact path="/Departments/Contact/:id">
           <Person />
         </Route>
 
-        <Route exact path="/Departments/Contact/:id/edit">
-          <EditPerson />
-        </Route>
 
   <Route component={NotFound} />*/}
       </Switch>
