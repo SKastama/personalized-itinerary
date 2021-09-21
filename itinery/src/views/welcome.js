@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const Welcome = (props) => {
     console.log("Welcome to Modern Software Co.")
     const [department, setDepartment] = useState("");
+    const [title, setTitle] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
@@ -29,7 +30,7 @@ const Welcome = (props) => {
                     type="text"
                     value={department}
                 >
-                    <option >Development</option>
+                    <option>Development</option>
                     <option>Business Development</option>
                     <option>Sales & Marketing</option>
                     <option>Test Team</option>
@@ -37,6 +38,13 @@ const Welcome = (props) => {
                     <option>Customer Support</option>
                     <option>Architecture</option>
                 </select>
+                <br />
+                <label> Title: </label>
+                <input onChange={(e) => {
+                    setTitle(e.target.value);
+                }}
+                    type="text"
+                    value={title} />
                 <br />
                 <label> First Name: </label>
                 <input onChange={(e) => {

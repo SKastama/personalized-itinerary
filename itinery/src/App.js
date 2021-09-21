@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Persons from "./views/persons";
 import NewPerson from "./views/NewPerson";
 import Welcome from "./views/welcome";
-
+import Details from "./views/Details";
 
 function App() {
   return (
@@ -19,8 +19,12 @@ function App() {
           <Persons />
         </Route>
 
-        <Route exact path="/Departments/Contact/new">
+        <Route exact path="/Departments/Contacts/new">
           <NewPerson />
+        </Route>
+
+        <Route exact path="/Departments/Contacts/:id">
+          <Details />
         </Route>
 
         {/*<Route exact path="/Departments/Contact/:id">
