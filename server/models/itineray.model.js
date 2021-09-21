@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 // {PATH} will be replaced with the field name, such as "location".
 const itinerayschema = new mongoose.Schema(
@@ -29,11 +30,6 @@ const itinerayschema = new mongoose.Schema(
             type: String,
             required: [true, "{PATH} is required."],
         },
-        // password: {
-        //     type: String,
-        //     required: [true, "{PATH} is required."],
-        // },
-
 
     },
     { timestamps: true } // adds createdAt and updatedAt
