@@ -47,20 +47,18 @@ const Persons = (props) => {
 
     return (
         <div>
-            <Link to="/Departments/Contact/new">New Contact</Link>
-            <h2>Deparment Contacts</h2>
+            <Link to="/Departments/Contacts/new">New Contact</Link>
+            <h2>Department Contacts</h2>
             <div>
                 <table style={tableStyle}>
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Department</th>
-                            <th>FirstName</th>
-                            <th>LastName</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                            <th>Schedules</th>
+                            <th>Department:</th>
+                            <th>Title:</th>
+                            <th>Name:</th>
+                            <th>Action:</th>
+                            <th>Schedules:</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,12 +69,11 @@ const Persons = (props) => {
                                         <input type="checkbox" onClick="" />
                                     </td>
                                     <td>{per.department}</td>
-                                    <td>{per.firstName}</td>
-                                    <td>{per.lastName}</td>
-                                    <td>{per.phone}</td>
-                                    <td>{per.email}</td>
+                                    <td>{per.title}</td>
+                                    <td>{per.lastName}, {per.firstName}</td>
                                     <td>
-                                        <Link to={`/Departments/Contact/${per._id}/edit`}>
+                                        <Link to={`/Departments/Contacts/${per._id}`}>Details</ Link>
+                                        <Link to={`/Departments/Contacts/${per._id}/edit`}>
                                             <h4>Edit</h4>
                                         </Link>
                                         <button onClick={(e) => {
