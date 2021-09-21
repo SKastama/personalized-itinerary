@@ -8,12 +8,14 @@ const NewPerson = (props) => {
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
+    const [title, setTitle] = useState("");
     const history = useHistory();
 
     const handleNewSubmit = (e) => {
         e.preventDefault();
         const newPerson = {
             department,
+            title,
             firstName,
             lastName,
             phone,
@@ -38,7 +40,7 @@ const NewPerson = (props) => {
                     setDepartment(e.target.value)
                 }}
                     type="text" value={department}>Deparments
-                    <option >Development</option>
+                    <option>Development</option>
                     <option>Business Development</option>
                     <option>Sales & Marketing</option>
                     <option>Test Team</option>
@@ -46,6 +48,10 @@ const NewPerson = (props) => {
                     <option>Customer Support</option>
                     <option>Architecture</option>
                 </select>
+                <label>Title: </label>
+                <input onChange={(e) => {
+                    setTitle(e.target.value);
+                }} type="text" value={title} />
                 <label>First Name: </label>
                 <input onChange={(e) => {
                     setFirstName(e.target.value);
@@ -69,7 +75,7 @@ const NewPerson = (props) => {
             </form>
         </div>
     )
-}
+};
 
 
 export default NewPerson;

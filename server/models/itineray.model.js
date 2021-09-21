@@ -1,11 +1,18 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 // {PATH} will be replaced with the field name, such as "location".
 const itinerayschema = new mongoose.Schema(
     {
         department: {
             type: String,
-            required: [true, "{PATH} is required."],
+            // required: [true, "{PATH} is required."],
+        },
+
+        title: {
+            type: String,
+            // required: [true, "{PATH} is required."],
+            // minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
 
         firstName: {
@@ -29,11 +36,6 @@ const itinerayschema = new mongoose.Schema(
             type: String,
             required: [true, "{PATH} is required."],
         },
-        // password: {
-        //     type: String,
-        //     required: [true, "{PATH} is required."],
-        // },
-
 
     },
     { timestamps: true } // adds createdAt and updatedAt
