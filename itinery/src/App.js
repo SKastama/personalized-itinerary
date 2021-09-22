@@ -1,20 +1,22 @@
 import './App.css';
 import { Redirect, Route, Switch } from "react-router-dom";
-import Persons from "./views/persons";
+import React, { useState } from "react";
+import Persons from "./views/HomePage";
 import NewPerson from "./views/NewPerson";
 import Login from "./views/Login";
 import Details from "./views/Details";
 import EditPerson from './views/EditPerson';
 import SignUp from './views/SignUp';
-
+import LogReg from "./views/LogReg";
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <div className="App">
       <Switch>
         <Redirect exact from="/" to="/Departments/admin" />
 
         <Route exact path="/Departments/admin">
-          <Login />
+          <LogReg setLoggedIn={() => setIsLoggedIn(true)} path="/"/>
         </Route>
 
         <Route exact path="/Departments/admin/signup">

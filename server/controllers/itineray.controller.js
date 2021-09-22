@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+const {User, Itineray} = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
@@ -61,18 +61,17 @@ module.exports = {
             .catch((err) => res.json(err));
     },
 
-    create: function (req, res) {
+    create(req, res) {
         console.log("create method executed");
-        User.create(
-            req,
+        const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
+        User.findByIdAndUpdate(
+            decodedJWT.payload._id,
             {
-                $push: {
-                    itineray: new Itineray(req.body)
-                }
+                $push: { itinerays: new Itineray(req.body)}
             },
         )
-            .then((newItineray) => {
-                res.json({ itineray: newItineray });
+            .then((updatedUser) => {
+                res.json({ user: updatedUser });
             })
             .catch((err) => {
                 res.status(400).json(err);
@@ -92,7 +91,7 @@ module.exports = {
     // Shorthand method in object syntax.
     getAll(req, res) {
         console.log("getAll method executed");
-        User.find()
+        Itineray.find()
             .then((users) => {
                 res.json(users);
             })

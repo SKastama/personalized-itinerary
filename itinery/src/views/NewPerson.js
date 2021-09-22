@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 
 const NewPerson = (props) => {
-    const [department, setDepartment] = useState("");
+    const [department, setDepartment] = useState("Development");
+    const [title, setTitle] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const [title, setTitle] = useState("");
     const history = useHistory();
 
     const handleNewSubmit = (e) => {
@@ -19,16 +19,18 @@ const NewPerson = (props) => {
             firstName,
             lastName,
             phone,
-            email,
+            email
         }
         axios
-            .post("http://localhost:8000/api/itinerays", newPerson)
+            .post("http://localhost:8000/api/itinerays", 
+            newPerson, 
+            { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
                 history.push("/Departments/Contacts");
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err.response)
             });
     }
     return (
@@ -39,14 +41,14 @@ const NewPerson = (props) => {
                 <select onChange={(e) => {
                     setDepartment(e.target.value)
                 }}
-                    type="text" value={department}>Deparments
-                    <option>Development</option>
-                    <option>Business Development</option>
-                    <option>Sales & Marketing</option>
-                    <option>Test Team</option>
-                    <option>Operations</option>
-                    <option>Customer Support</option>
-                    <option>Architecture</option>
+                    type="text">
+                    <option value="Development">Development</option>
+                    <option value="Business Development">Business Development</option>
+                    <option value="Sales & Marketing">Sales & Marketing</option>
+                    <option value="Test Team">Test Team</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Customer Support">Customer Support</option>
+                    <option value="Architecture">Architecture</option>
                 </select>
                 <label>Title: </label>
                 <input onChange={(e) => {
