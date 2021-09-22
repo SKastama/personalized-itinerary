@@ -54,7 +54,7 @@ const Login = () => {
                     id="email"
                     label="Email Address"
                     name="email"
-                    autoComplete="email"
+                    autoComplete="email" // Should match values with the server *
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -85,7 +85,7 @@ const Login = () => {
             </Button>
             <Grid container justifyContent="flex-end">
                 <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/Departments/admin/signup" variant="body2">
                     Don't have an account? Sign Up
                 </Link>
                 </Grid>
