@@ -44,23 +44,12 @@ const ItineraySchema = new mongoose.Schema(
 
 const UserSchema = new mongoose.Schema(
     {
-        // uDepartment: {
-        //     type: String,
-        //     required: [true, "{PATH} is required."],
-        // },
-
-        // uTitle: {
-        //     type: String,
-        //     required: [true, "{PATH} is required."],
-        //     minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
-        // },
-
         uFirstName: {
             type: String,
             required: [true, "{PATH} is required."],
             minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-// Comment
+
         uLastName: {
             type: String,
             required: [true, "{PATH} is required."],
@@ -86,7 +75,7 @@ const UserSchema = new mongoose.Schema(
             required: [true, "{PATH} is required."],
         },
 
-        itineray: [ItineraySchema],
+        itinerays: [ItineraySchema],
 
     }, { timestamps: true }
 );
@@ -113,9 +102,9 @@ UserSchema.pre('save', function (next) {
         .catch((err) => console.log(err));
 });
 
-
+const Itineray = mongoose.model("Itineray", ItineraySchema);
 const User = mongoose.model("User", UserSchema);
 
 // The mongoose model that lets you connect to it's DB collection.
-module.exports = User;
+module.exports = {User:User, Itineray:Itineray};
 
