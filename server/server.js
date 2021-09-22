@@ -1,24 +1,31 @@
+require('dotenv').config();
+
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const cors = require("cors");
 
-// Environment vars
-const port = 8000;
-const db_name = "itinerays";
 
 
-// Import the function from mongoose.config then execute it.
-require("./config/mongoose.config")(db_name);
+require("./config/mongoose.config")(process.env.DB_NAME);
 
+// const myFirstSecret = process.env.FIRST_SECRET_KEY;
+// const payload = {
+//     id: user._id
+// };
+// Comment
+// // notice that we're using the SECRET_KEY from our .env file
+// const userToken = jwt.sign(payload, process.env.SECRET_KEY);
 
 const app = express();
 
-app.use(cors());
-
-// req.body is undefined without this!
+app.use(cookieParser());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
+
+
 require("./routes/itineray.routes")(app);
 
-// After all the routes have been added, server is ready to handle requests.
-app.listen(port, () =>
-    console.log(`Listening on port ${port} for REQuests to RESpond to.`)
+
+app.listen(process.env.DB_PORT, () =>
+    console.log(`Listening on port ${process.env.DB_PORT}`)
 );
