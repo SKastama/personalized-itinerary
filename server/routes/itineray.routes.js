@@ -13,5 +13,6 @@ module.exports = (app) => {
     app.get("/api/itinerays/:id", authenticate, itinerayController.getOne);
     app.delete("/api/itinerays/:id", authenticate, itinerayController.delete);
     app.put("/api/itinerays/:id", authenticate, itinerayController.update);
+    app.get("/api/users/loggedin", authenticate, itinerayController.getLoggedInUser);
     // app.get("https://api.zoom.us/v2/",)
 };
