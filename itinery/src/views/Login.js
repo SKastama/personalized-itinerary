@@ -54,7 +54,7 @@ const Login = () => {
                     id="email"
                     label="Email Address"
                     name="email"
-                    autoComplete="email"
+                    autoComplete="email" // Should match values with the server *
                 />
                 </Grid>
                 <Grid item xs={12}>
