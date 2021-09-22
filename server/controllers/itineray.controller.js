@@ -15,6 +15,7 @@ module.exports = {
             .catch((err) => res.status(400).json(err));
     },
 
+    
     login(req, res) {
         User.findOne({ uEmail: req.body.uEmail })
             .then((user) => {

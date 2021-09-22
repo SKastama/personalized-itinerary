@@ -91,6 +91,7 @@ const UserSchema = new mongoose.Schema(
     }, { timestamps: true }
 );
 
+
 UserSchema.virtual('confirmPassword')
     .get(() => this._confirmPassword)
     .set(value => this._confirmPassword = value);
