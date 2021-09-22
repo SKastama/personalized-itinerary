@@ -2,7 +2,7 @@ import './App.css';
 import { Redirect, Route, Switch } from "react-router-dom";
 import Persons from "./views/persons";
 import NewPerson from "./views/NewPerson";
-import Welcome from "./views/welcome";
+import Login from "./views/Login";
 import Details from "./views/Details";
 import EditPerson from './views/EditPerson';
 import SignUp from './views/SignUp';
@@ -14,7 +14,7 @@ function App() {
         <Redirect exact from="/" to="/Departments/admin" />
 
         <Route exact path="/Departments/admin">
-          <Welcome />
+          <Login />
         </Route>
 
         <Route exact path="/Departments/admin/signup">
