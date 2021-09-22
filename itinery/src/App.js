@@ -5,6 +5,7 @@ import NewPerson from "./views/NewPerson";
 import Welcome from "./views/welcome";
 import Details from "./views/Details";
 import EditPerson from './views/EditPerson';
+import SignUp from './views/SignUp';
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
 
         <Route exact path="/Departments/admin">
           <Welcome />
+        </Route>
+
+        <Route exact path="/Departments/admin/signup">
+          <SignUp />
         </Route>
 
         <Route exact path="/Departments/Contacts">
@@ -31,6 +36,7 @@ function App() {
         <Route exact path="/Departments/Contacts/:id/edit">
           <EditPerson />
         </Route>
+
         {/*<Route exact path="/Departments/Contact/:id">
           <Person />
         </Route>
