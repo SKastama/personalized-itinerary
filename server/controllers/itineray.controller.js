@@ -128,12 +128,18 @@ module.exports = {
     update(req, res) {
         console.log("update method executed", "url params:", req.params);
 
-        User.findByIdAndUpdate(req.params.id, req.body, {
-            runValidators: true, // Run model validations again.
-            new: true, // return newly updated document.
+        User.findByIdAndUpdate(req.params.id, req.body, 
+        {
+            $push: {
+                itineray: new Itineray(req.body)
+            }
+        },
+        {
+            runValidators: true,
+            new: true,
         })
-            .then((user) => {
-                res.json(user);
+            .then((updatedItineray) => {
+                res.json({ itineray: updatedItineray });
             })
             .catch((err) => {
                 res.status(400).json(err);
