@@ -1,7 +1,7 @@
 const itinerayController = require("../controllers/itineray.controller");
 const { authenticate } = require("../config/jwt.config");
 
-
+// Comment
 
 module.exports = (app) => {
     app.post("/api/register", itinerayController.register);

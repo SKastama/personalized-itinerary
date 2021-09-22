@@ -60,7 +60,7 @@ const UserSchema = new mongoose.Schema(
             required: [true, "{PATH} is required."],
             minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
+// Comment
         uLastName: {
             type: String,
             required: [true, "{PATH} is required."],
@@ -91,7 +91,7 @@ const UserSchema = new mongoose.Schema(
     }, { timestamps: true }
 );
 
-
+// Comment
 UserSchema.virtual('confirmPassword')
     .get(() => this._confirmPassword)
     .set(value => this._confirmPassword = value);

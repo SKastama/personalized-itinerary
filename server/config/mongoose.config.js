@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// Comment
 module.exports = (db_name) => {
     mongoose
         .connect(`mongodb://localhost/${db_name}`)

@@ -12,7 +12,7 @@ require("./config/mongoose.config")(process.env.DB_NAME);
 // const payload = {
 //     id: user._id
 // };
-
+// Comment
 // // notice that we're using the SECRET_KEY from our .env file
 // const userToken = jwt.sign(payload, process.env.SECRET_KEY);
 

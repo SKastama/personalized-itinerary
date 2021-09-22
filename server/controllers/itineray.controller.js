@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
-
+// Comment
 // Export an object that is full of methods.
 module.exports = {
     register(req, res) {
@@ -15,7 +15,7 @@ module.exports = {
             .catch((err) => res.status(400).json(err));
     },
 
-    
+
     login(req, res) {
         User.findOne({ uEmail: req.body.uEmail })
             .then((user) => {
