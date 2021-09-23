@@ -1,6 +1,8 @@
 const { User, Itineray } = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const axios = require("axios");
 
 // Comment
 // Export an object that is full of methods.
@@ -117,6 +119,7 @@ module.exports = {
 
     delete(req, res) {
         console.log("delete method executed", "url params:", req.params);
+
         const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
         User.findByIdAndUpdate(
             decodedJWT.payload._id,
@@ -129,9 +132,10 @@ module.exports = {
         )
             .then((deleteUser) => {
                 res.json(deleteUser);
+
             })
             .catch((err) => {
-                res.json(err);
+                res.status(400).json(err);
             });
     },
 
@@ -159,4 +163,36 @@ module.exports = {
                 res.status(400).json(err);
             });
     },
+
+    zoom(req, res) {
+        axios.get('https://api.zoom.us/v2/users/me/meetings', {
+            headers: {
+                'Authorization': `Bearer ${process.env.ZOOM_TOKEN}`
+            }
+            })
+            .then((zoomRes) => {
+            console.log("zoom", zoomRes.data)
+            res.json(zoomRes.data)
+            })
+            .catch((zoomError) => {
+            console.error("zoom", zoomError.response)
+            res.status(400).json(zoomError)
+            })
+    },
+    zoomPost(req, res) {
+        axios.post('https://api.zoom.us/v2/users/me/meetings', req.body, {
+            headers: {
+                'Authorization': `Bearer ${process.env.ZOOM_TOKEN}`
+            }
+            })
+            .then((zoomRes) => {
+            console.log("zoom", zoomRes.data)
+            res.json(zoomRes.data)
+            })
+            .catch((zoomError) => {
+            console.error("zoom", zoomError.response)
+            res.status(400).json(zoomError)
+            })
+    }
+
 };
