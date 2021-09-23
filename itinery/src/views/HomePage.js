@@ -103,6 +103,16 @@ import {zoomToken} from "../config.json";
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
+    const [needsUpdate, setNeedsUpdate] = useState(false);
+
+    // const getLoggedInUser = () => {
+    //     axios
+    //     .get("http://localhost:8000/api/users/loggedin", {
+    //         withCredentials: true,
+    //     })
+    //     .then((res) => console.log("loggin"))
+    //     .catch(console.log);
+    // };
     const [topic, setTopic] = useState("");
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState(60);
@@ -120,7 +130,21 @@ const UserList = (props) => {
     const history = useHistory();
 
     useEffect(() => {
+        if (needsUpdate == true) {
+            setNeedsUpdate(false);
+        };
         axios
+
+            .get("http://localhost:8000/api/users/loggedin", {
+                withCredentials: true,
+            })
+            .then((res) => {
+                setPerson(res.data);
+                console.log(res.data);
+            })
+            .catch(console.log);
+    }, [needsUpdate]);
+
         .get("http://localhost:8000/api/users/loggedin", {
             withCredentials: true,
         })
@@ -180,11 +204,12 @@ const UserList = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                const filteredItinerays = person.filter((itin) => {
-                    return itin._id !== delId;
-                });
-        
-                setPerson(filteredItinerays);
+                // const filteredItinerays = person.Itinerays.filter((itin) => {
+                //     return itin._id !== delId;
+                // });
+                // console.log(filteredItinerays)
+                // setPerson(filteredItinerays);
+                setNeedsUpdate(true);
             })
             .catch((err) => {
                 console.log(err.response);
@@ -200,32 +225,33 @@ const UserList = (props) => {
             <Link to="/Departments/Contacts/new">New Contact</Link>
             <table>
                 <tbody>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Created On</th>
-                    <th/>
-                </tr>
-                {person.itinerays.map((itineray) => (
-                    <tr key={itineray._id}>
-                    <td>{itineray.firstName}</td>
-                    <td>{itineray.email}</td>
-                    <td>{itineray.createdAt}</td>
-                    <td className="row mt-3 justify-content-center">
-                        <button
-                        onClick={(e) => {
-                            handleDelete(itineray._id);
-                        }}
-                        className="btn btn-sm btn-outline-danger mx-1"
-                        >
-                        Delete
-                        </button>
-                    </td>
-
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Created On</th>
+                        <th />
                     </tr>
-                ))}
+                    {person.itinerays.map((itineray) => (
+                        <tr key={itineray._id}>
+                            <td>{itineray.firstName}</td>
+                            <td>{itineray.email}</td>
+                            <td>{itineray.createdAt}</td>
+                            <td className="row mt-3 justify-content-center">
+                                <button
+                                    onClick={(e) => {
+                                        handleDelete(itineray._id);
+                                    }}
+                                    className="btn btn-sm btn-outline-danger mx-1"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                            <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
+
             <form onSubmit={zoomPost}>
                 <label>Topic: </label>
                 <input onChange={(e) => {setTopic(e.target.value)}} type="text" value={topic} />
@@ -284,6 +310,7 @@ const UserList = (props) => {
                 <button type="Submit">Submit</button>
             </form>
         </div>
+
     );
 };
 
