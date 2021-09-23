@@ -1,4 +1,4 @@
-const {User, Itineray} = require("../models/user.model");
+const { User, Itineray } = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
@@ -19,34 +19,34 @@ module.exports = {
     login(req, res) {
         User.findOne({ uEmail: req.body.uEmail })
             .then((user) => {
-            if (user === null) {
-                res.status(400).json({ msg: "invalid login attempt" });
-            } else {
-                bcrypt
-                    .compare(req.body.uPassword, user.uPassword)
-                    .then((passwordIsValid) => {
-                        if (passwordIsValid) {
-                            res
-                            .cookie(
-                                "usertoken",
-                                jwt.sign({ _id: user._id }, process.env.JWT_SECRET),
-                                {
-                                    httpOnly: true,
-                                }
-                            )
-                            .json({ msg: "success!" });
-                        } else {
-                            res.status(400).json({ msg: "invalid login attempt" });
-                        }
-                    })
-                    .catch((err) =>
-                        res.status(400).json({ msg: "invalid login attempt" })
-                    );
+                if (user === null) {
+                    res.status(400).json({ msg: "invalid login attempt" });
+                } else {
+                    bcrypt
+                        .compare(req.body.uPassword, user.uPassword)
+                        .then((passwordIsValid) => {
+                            if (passwordIsValid) {
+                                res
+                                    .cookie(
+                                        "usertoken",
+                                        jwt.sign({ _id: user._id }, process.env.JWT_SECRET),
+                                        {
+                                            httpOnly: true,
+                                        }
+                                    )
+                                    .json({ msg: "success!" });
+                            } else {
+                                res.status(400).json({ msg: "invalid login attempt" });
+                            }
+                        })
+                        .catch((err) =>
+                            res.status(400).json({ msg: "invalid login attempt" })
+                        );
                 }
             })
             .catch((err) => res.json(err));
     },
-    
+
 
     logout(req, res) {
         res.clearCookie("usertoken");
@@ -55,7 +55,7 @@ module.exports = {
 
     getLoggedInUser(req, res) {
         const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
-    
+
         User.findById(decodedJWT.payload._id)
             .then((user) => res.json(user))
             .catch((err) => res.json(err));
@@ -67,7 +67,7 @@ module.exports = {
         User.findByIdAndUpdate(
             decodedJWT.payload._id,
             {
-                $push: { itinerays: new Itineray(req.body)}
+                $push: { itinerays: new Itineray(req.body) }
             },
         )
             .then((updatedUser) => {
@@ -76,16 +76,16 @@ module.exports = {
             .catch((err) => {
                 res.status(400).json(err);
             });
-        },
+    },
 
 
-        // User.create(req.body)
-        //     .then((user) => {
-        //         res.json(user);
-        //     })
-        //     .catch((err) => {
-        //         res.status(400).json(err);
-        //     });
+    // User.create(req.body)
+    //     .then((user) => {
+    //         res.json(user);
+    //     })
+    //     .catch((err) => {
+    //         res.status(400).json(err);
+    //     });
     // },
 
     // Shorthand method in object syntax.
@@ -102,10 +102,13 @@ module.exports = {
 
     getOne(req, res) {
         console.log("getOne method executed", "url params:", req.params);
-
-        User.findById(req.params.id)
+        const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
+        User.findById(
+            decodedJWT.payload._id,
+        )
             .then((user) => {
-                res.json(user);
+                const itineray = user.itinerays.id(req.params.id);
+                res.json(itineray);
             })
             .catch((err) => {
                 res.json(err);
@@ -114,10 +117,18 @@ module.exports = {
 
     delete(req, res) {
         console.log("delete method executed", "url params:", req.params);
-
-        User.findByIdAndDelete(req.params.id)
-            .then((user) => {
-                res.json(user);
+        const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
+        User.findByIdAndUpdate(
+            decodedJWT.payload._id,
+            {
+                $pull: {
+                    itinerays: { _id: req.params.id }
+                },
+            },
+            { multi: true }
+        )
+            .then((deleteUser) => {
+                res.json(deleteUser);
             })
             .catch((err) => {
                 res.json(err);
@@ -126,17 +137,21 @@ module.exports = {
 
     update(req, res) {
         console.log("update method executed", "url params:", req.params);
-
-        User.findByIdAndUpdate(req.params.id, req.body, 
-        {
-            $push: {
-                itineray: new Itineray(req.body)
-            }
-        },
-        {
-            runValidators: true,
-            new: true,
-        })
+        const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
+        User.findByIdAndUpdate(
+            decodedJWT.payload._id,
+            req.params.id,
+            req.body,
+            {
+                $put: {
+                    itineray: new Itineray(req.body)
+                }
+            },
+            { multi: true },
+            {
+                runValidators: true,
+                new: true,
+            })
             .then((updatedItineray) => {
                 res.json({ itineray: updatedItineray });
             })

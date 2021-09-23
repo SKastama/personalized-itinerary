@@ -106,5 +106,5 @@ const Itineray = mongoose.model("Itineray", ItineraySchema);
 const User = mongoose.model("User", UserSchema);
 
 // The mongoose model that lets you connect to it's DB collection.
-module.exports = {User:User, Itineray:Itineray};
+module.exports = { User: User, Itineray: Itineray };
 
