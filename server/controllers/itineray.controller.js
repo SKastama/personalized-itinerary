@@ -114,13 +114,19 @@ module.exports = {
 
     delete(req, res) {
         console.log("delete method executed", "url params:", req.params);
-
-        User.findByIdAndDelete(req.params.id)
-            .then((user) => {
-                res.json(user);
+        
+        User.findByIdAndUpdate(
+            req.params.id,
+            {
+                $pull: { itinerays: { _id: req.params.itinerays_id}},
+            },
+            { multi: true }
+        )
+            .then((deletedItineray) => {
+                res.json(deletedItineray);
             })
             .catch((err) => {
-                res.json(err);
+                res.status(400).json(err);
             });
     },
 

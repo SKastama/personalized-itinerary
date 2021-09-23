@@ -1,6 +1,6 @@
 import React from "react";
 
-import Login from "../views/Login";
+import SignIn from "../views/SignIn";
 import { Link } from "react-router-dom";
 
 // import SignUp from "../views/SignUp";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const LogReg = ({ setLoggedIn }) => {
     return (
         <div className="container-flex">
-            <Login setLoggedIn={setLoggedIn} />
+            <SignIn setLoggedIn={setLoggedIn} />
             <p>No account yet? Please sign up.</p>
             <Link to="/Departments/admin/signup">Sign up</Link>
         </div>
