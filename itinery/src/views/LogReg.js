@@ -7,7 +7,6 @@ const LogReg = ({ setLoggedIn }) => {
     return (
         <div className="container-flex">
             <Login setLoggedIn={setLoggedIn} />
-            <SignUp/>
         </div>
     );
 };
