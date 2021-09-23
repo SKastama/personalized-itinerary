@@ -98,10 +98,12 @@
 // export default Persons;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import {zoomToken} from "../config.json";
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
+    const [needsUpdate, setNeedsUpdate] = useState(false);
 
     // const getLoggedInUser = () => {
     //     axios
@@ -111,9 +113,38 @@ const UserList = (props) => {
     //     .then((res) => console.log("loggin"))
     //     .catch(console.log);
     // };
+    const [topic, setTopic] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [duration, setDuration] = useState(60);
+    // const [scheduleFor, setScheduleFor] = useState("");
+    const [contactEmail, setContactEmail] = useState("");
+    const [timezone, setTimezone] = useState("America/Los_Angeles");
+    const [hostVideo,setHostVideo] = useState(true);
+    const [participantVideo,setParticipantVideo] = useState(true);
+    const [muteUponEntry,setMuteUponEntry] = useState(true);
+    const [watermark, setWatermark] = useState(true);
+    const [autoRecording,setAutoRecording] = useState("local");
+    const [audio,setAudio] = useState("both");
+    const [registrantsEmailNotification, setRegistrantsEmailNotification] = useState(false);
+    const [registrantsConfirmationEmail, setRegistrantsConfirmationEmail] = useState(true);
+    const history = useHistory();
 
     useEffect(() => {
+        if (needsUpdate == true) {
+            setNeedsUpdate(false);
+        };
         axios
+
+            .get("http://localhost:8000/api/users/loggedin", {
+                withCredentials: true,
+            })
+            .then((res) => {
+                setPerson(res.data);
+                console.log(res.data);
+            })
+            .catch(console.log);
+    }, [needsUpdate]);
+
         .get("http://localhost:8000/api/users/loggedin", {
             withCredentials: true,
         })
@@ -122,7 +153,50 @@ const UserList = (props) => {
             console.log(res.data);
         })
         .catch(console.log);
+
+        axios
+        .get("http://localhost:8000/api/zoom", {
+            withCredentials: true,
+        })
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) =>{
+            console.log("error with zoom API")
+        });
+        
     }, []);
+
+    const zoomPost = (e) => {
+        e.preventDefault();
+        const newMeeting = {
+            topic:topic,
+            start_time:startTime,
+            duration,
+            // schedule_for:scheduleFor,
+            contact_email:contactEmail,
+            timezone,
+            host_video:hostVideo,
+            participant_video:participantVideo,
+            mute_upon_entry:muteUponEntry,
+            watermark,
+            auto_recording:autoRecording,
+            audio,
+            registrants_email_notification:registrantsEmailNotification,
+            registrants_confirmation_email:registrantsConfirmationEmail
+        }
+        console.log("new Meeting:", newMeeting);
+        axios
+        .post("http://localhost:8000/api/zoom/new", newMeeting, {
+            withCredentials: true,
+        })
+        .then((res) => {
+            console.log("Zoom create meetinf response", res.data);
+        })
+        .catch((err) =>{
+            console.log("error with zoom API")
+        });
+    }
 
     const handleDelete = (delId) => {
         axios
@@ -130,11 +204,12 @@ const UserList = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                const filteredItinerays = person.filter((itin) => {
-                    return itin._id !== delId;
-                });
-        
-                setPerson(filteredItinerays);
+                // const filteredItinerays = person.Itinerays.filter((itin) => {
+                //     return itin._id !== delId;
+                // });
+                // console.log(filteredItinerays)
+                // setPerson(filteredItinerays);
+                setNeedsUpdate(true);
             })
             .catch((err) => {
                 console.log(err.response);
@@ -150,40 +225,92 @@ const UserList = (props) => {
             <Link to="/Departments/Contacts/new">New Contact</Link>
             <table>
                 <tbody>
-                <tr>
-                    <th>Department:</th>
-                    <th>Title:</th>
-                    <th>Name:</th>
-                    <th>Action:</th>
-                    <th>Schedules</th>
-                    <th/>
-                </tr>
-                {person.itinerays.map((itineray) => (
-                    <tr key={itineray._id}>
-                    <td>{itineray.department}</td>
-                    <td>{itineray.title}</td>
-                    <td>{itineray.lastName}, {itineray.firstName}</td>
-                    <td className="row mt-3 justify-content-center">
-                        <Link to={`/Departments/Contacts/${itineray._id}`}>Details </Link>
-                        <Link to={`/Departments/Contacts/${itineray._id}/edit`}>edit</Link>
-                        <button
-                        onClick={(e) => {
-                            handleDelete(itineray._id);
-                        }}
-                        className="btn btn-sm btn-outline-danger mx-1"
-                        >
-                        Delete
-                        </button>
-                    </td>
-                    <td>
-                        <button onClick="">Join Meeting</button>
-                        <button onClick="">Meeting Reminder</button>
-                    </td>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Created On</th>
+                        <th />
                     </tr>
-                ))}
+                    {person.itinerays.map((itineray) => (
+                        <tr key={itineray._id}>
+                            <td>{itineray.firstName}</td>
+                            <td>{itineray.email}</td>
+                            <td>{itineray.createdAt}</td>
+                            <td className="row mt-3 justify-content-center">
+                                <button
+                                    onClick={(e) => {
+                                        handleDelete(itineray._id);
+                                    }}
+                                    className="btn btn-sm btn-outline-danger mx-1"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                            <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
+
+            <form onSubmit={zoomPost}>
+                <label>Topic: </label>
+                <input onChange={(e) => {setTopic(e.target.value)}} type="text" value={topic} />
+                <label>Start Time: </label>
+                <input onChange={(e) => {setStartTime(e.target.value)}} type="date" value={startTime} />
+                <label>Duration: </label>
+                <input onChange={(e) => {setDuration(e.target.value)}} type="number" value={duration} />
+                {/* <label>Schedule For: </label>
+                <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} /> */}
+                <label>Email contact: </label>
+                <input onChange={(e) => {setContactEmail(e.target.value)}} type="text" value={contactEmail} />
+                <label>Timezone: </label>
+                <input onChange={(e) => {setTimezone(e.target.value)}} type="text" value={timezone} />
+                <label>Host Video: </label>
+                <select type="text" onChange={(e) => {setHostVideo(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <label>Participant Video: </label>
+                <select type="text" onChange={(e) => {setParticipantVideo(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <label>Mute Upon Entry: </label>
+                <select type="text" onChange={(e) => {setMuteUponEntry(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <label>Watermark: </label>
+                <select type="" onChange={(e) => {setWatermark(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <label>Auto Recording: </label>
+                <select type="text" onChange={(e) => {setAutoRecording(e.target.value)}}>
+                    <option value="local">Local</option>
+                    <option value="cloud">Cloud</option>
+                    <option value="none">None</option>
+                </select>
+                <label>Audio: </label>
+                <select type="text" onChange={(e) => {setAudio(e.target.value)}}>
+                    <option value="both">Both</option>
+                    <option value="telephony">Telephony</option>
+                    <option value="voip">Viop</option>
+                </select>
+                <label>Registrants Email Notification: </label>
+                <select type="boolean" onChange={(e) => {setRegistrantsEmailNotification(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <label>Registrants Confirmation Email: </label>
+                <select type="boolean" onChange={(e) => {setRegistrantsConfirmationEmail(e.target.value)}}>
+                    <option value={true}>True</option>
+                    <option value={false}>False</option>
+                </select>
+                <button type="Submit">Submit</button>
+            </form>
         </div>
+
     );
 };
 
