@@ -151,17 +151,21 @@ const UserList = (props) => {
             <table>
                 <tbody>
                 <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Created On</th>
+                    <th>Department:</th>
+                    <th>Title:</th>
+                    <th>Name:</th>
+                    <th>Action:</th>
+                    <th>Schedules</th>
                     <th/>
                 </tr>
                 {person.itinerays.map((itineray) => (
                     <tr key={itineray._id}>
-                    <td>{itineray.firstName}</td>
-                    <td>{itineray.email}</td>
-                    <td>{itineray.createdAt}</td>
+                    <td>{itineray.department}</td>
+                    <td>{itineray.title}</td>
+                    <td>{itineray.lastName}, {itineray.firstName}</td>
                     <td className="row mt-3 justify-content-center">
+                        <Link to={`/Departments/Contacts/${itineray._id}`}>Details </Link>
+                        <Link to={`/Departments/Contacts/${itineray._id}/edit`}>edit</Link>
                         <button
                         onClick={(e) => {
                             handleDelete(itineray._id);
@@ -171,7 +175,10 @@ const UserList = (props) => {
                         Delete
                         </button>
                     </td>
-
+                    <td>
+                        <button onClick="">Join Meeting</button>
+                        <button onClick="">Meeting Reminder</button>
+                    </td>
                     </tr>
                 ))}
                 </tbody>
