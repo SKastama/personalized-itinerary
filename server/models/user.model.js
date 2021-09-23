@@ -9,35 +9,29 @@ const ItineraySchema = new mongoose.Schema(
             type: String,
             // required: [true, "{PATH} is required."],
         },
-
         title: {
             type: String,
             // required: [true, "{PATH} is required."],
             // minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
         firstName: {
             type: String,
             // required: [true, "{PATH} is required."],
             // minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
         lastName: {
             type: String,
             // required: [true, "{PATH} is required."],
             // minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
         phone: {
             type: Number,
             // required: [true, "{PATH} is required."],
         },
-
         email: {
             type: String,
             // required: [true, "{PATH} is required."],
         },
-
     },
     { timestamps: true } // adds createdAt and updatedAt
 );
@@ -49,18 +43,15 @@ const UserSchema = new mongoose.Schema(
             required: [true, "{PATH} is required."],
             minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
         uLastName: {
             type: String,
             required: [true, "{PATH} is required."],
             minlength: [1, "{PATH} must be at least {MINLENGTH} characters."],
         },
-
         uPhone: {
             type: Number,
             required: [true, "{PATH} is required."],
         },
-
         uEmail: {
             type: String,
             required: [true, "{PATH} is required."],
@@ -69,14 +60,11 @@ const UserSchema = new mongoose.Schema(
                 message: "Please enter a valid email"
             }
         },
-
         uPassword: {
             type: String,
             required: [true, "{PATH} is required."],
         },
-
         itinerays: [ItineraySchema],
-
     }, { timestamps: true }
 );
 
