@@ -5,7 +5,7 @@
 
 // const Persons = (props) => {
 
-//     const [persons, setPersons] = useState([]);
+//     const [person, setPersons] = useState([]);
 //     const tableStyle = {
 //         "border": "1px solid black",
 //         "box-boder": "1px solid black",
@@ -33,7 +33,7 @@
 //             .then((res) => {
 //                 // It has successfully been deleted from the DATABASE
 //                 // It is still IN our state, we need to remove it from state.
-//                 const filteredsetPersons = persons.filter((per) => {
+//                 const filteredsetPersons = person.filter((per) => {
 //                     return per._id !== delId;
 //                 });
 
@@ -62,7 +62,7 @@
 //                         </tr>
 //                     </thead>
 //                     <tbody>
-//                         {persons.map((per) => {
+//                         {person.map((per) => {
 //                             return (
 //                                 <tr>
 //                                     <td>
@@ -101,37 +101,36 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const UserList = (props) => {
-    const [persons, setPersons] = useState([]);
+    const [person, setPersons] = useState(null);
 
-    const getLoggedInUser = () => {
+    // const getLoggedInUser = () => {
+    //     axios
+    //     .get("http://localhost:8000/api/users/loggedin", {
+    //         withCredentials: true,
+    //     })
+    //     .then((res) => console.log("loggin"))
+    //     .catch(console.log);
+    // };
+
+    useEffect(() => {
         axios
         .get("http://localhost:8000/api/users/loggedin", {
             withCredentials: true,
         })
-        .then((res) => console.log("loggin"))
-        .catch(console.log);
-    };
-
-    useEffect(() => {
-        axios
-        .get("http://localhost:8000/api/itinerays/all", {
-            withCredentials: true,
-        })
         .then((res) => {
             setPersons(res.data);
-            console.log(res);
+            console.log(res.data);
         })
-        .catch((err) => {
-            console.log("not authorized");
-            console.log(err.response);
-        });
+        .catch(console.log);
     }, []);
 
+    if (person === null) {
+        return "Loading...";
+    }
     return (
         <div className="container">
-            <h3>All Users:</h3>
+            <h3>{person.uFirstName}'s itineraries:</h3>
             <Link to="/Departments/Contacts/new">New Contact</Link>
-            <button onClick={getLoggedInUser}>Get Logged In User</button>
             <table>
                 <tbody>
                 <tr>
@@ -139,10 +138,11 @@ const UserList = (props) => {
                     <th>Email</th>
                     <th>Created On</th>
                 </tr>
-                {persons.map((person) => (
-                    <tr key={person._id}>
-                        <td>{person.firstName}</td>
-                        <td>{person.email}</td>
+                {person.itinerays.map((itineray) => (
+                    <tr key={itineray._id}>
+                    <td>{itineray.firstName}</td>
+                    <td>{itineray.email}</td>
+                    <td>{itineray.createdAt}</td>
                     </tr>
                 ))}
                 </tbody>
