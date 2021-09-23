@@ -91,9 +91,9 @@ module.exports = {
     // Shorthand method in object syntax.
     getAll(req, res) {
         console.log("getAll method executed");
-        Itineray.find()
-            .then((users) => {
-                res.json(users);
+        User.find()
+            .then((itinerays) => {
+                res.json(itinerays);
             })
             .catch((err) => {
                 res.json(err);
