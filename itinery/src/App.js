@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import React, { useState } from "react";
 import Persons from "./views/HomePage";
 import NewPerson from "./views/NewPerson";
-import Login from "./views/Login";
+// import Login from "./views/Login";
 import Details from "./views/Details";
 import EditPerson from './views/EditPerson';
 import SignUp from './views/SignUp';
@@ -16,7 +16,7 @@ function App() {
         <Redirect exact from="/" to="/Departments/admin" />
 
         <Route exact path="/Departments/admin">
-          <LogReg setLoggedIn={() => setIsLoggedIn(true)} path="/"/>
+          <LogReg setLoggedIn={() => setIsLoggedIn(true)} path="/" />
         </Route>
 
         <Route exact path="/Departments/admin/signup">

@@ -102,35 +102,35 @@
 //     }
 
 import React, { useState } from "react";
-import { useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 
-const SignIn = ({setLoggedIn}) => {
+const SignIn = ({ setLoggedIn }) => {
     const [uEmail, setUEmail] = useState("");
     const [uPassword, setUPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const history = useHistory();
 
-const login = (event) => {
-    event.preventDefault();
-    axios
-        .post(
-            "http://localhost:8000/api/login",
-            { uEmail, uPassword },
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res) => {
-            console.log(res);
-            setLoggedIn();
-            history.push("/Departments/Contacts");
-        })
-        .catch((err) => {
-            console.log(err);
-            setErrorMessage(err);
-        });
-};
+    const login = (event) => {
+        event.preventDefault();
+        axios
+            .post(
+                "http://localhost:8000/api/login",
+                { uEmail, uPassword },
+                {
+                    withCredentials: true,
+                }
+            )
+            .then((res) => {
+                console.log(res);
+                setLoggedIn();
+                history.push("/Departments/Contacts");
+            })
+            .catch((err) => {
+                console.log(err);
+                setErrorMessage(err);
+            });
+    };
 
     return (
         <fieldset>
