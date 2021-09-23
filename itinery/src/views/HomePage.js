@@ -5,7 +5,7 @@
 
 // const Persons = (props) => {
 
-//     const [person, setPersons] = useState([]);
+//     const [person, ] = useState([]);
 //     const tableStyle = {
 //         "border": "1px solid black",
 //         "box-boder": "1px solid black",
@@ -20,7 +20,7 @@
 //         axios
 //             .get("http://localhost:8000/api/itinerays/all")
 //             .then((res) => {
-//                 setPersons(res.data);
+//                 (res.data);
 //             })
 //             .catch((err) => {
 //                 console.log(err);
@@ -37,7 +37,7 @@
 //                     return per._id !== delId;
 //                 });
 
-//                 setPersons(filteredsetPersons);
+//                 (filteredsetPersons);
 //             })
 //             .catch((err) => {
 //                 console.log(err.response);
@@ -101,7 +101,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const UserList = (props) => {
-    const [person, setPersons] = useState(null);
+    const [person, setPerson] = useState(null);
 
     // const getLoggedInUser = () => {
     //     axios
@@ -118,11 +118,28 @@ const UserList = (props) => {
             withCredentials: true,
         })
         .then((res) => {
-            setPersons(res.data);
+            setPerson(res.data);
             console.log(res.data);
         })
         .catch(console.log);
     }, []);
+
+    const handleDelete = (delId) => {
+        axios
+            .delete("http://localhost:8000/api/itinerays/" + delId, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                const filteredItinerays = person.filter((itin) => {
+                    return itin._id !== delId;
+                });
+        
+                setPerson(filteredItinerays);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+    };
 
     if (person === null) {
         return "Loading...";
@@ -137,12 +154,24 @@ const UserList = (props) => {
                     <th>Username</th>
                     <th>Email</th>
                     <th>Created On</th>
+                    <th/>
                 </tr>
                 {person.itinerays.map((itineray) => (
                     <tr key={itineray._id}>
                     <td>{itineray.firstName}</td>
                     <td>{itineray.email}</td>
                     <td>{itineray.createdAt}</td>
+                    <td className="row mt-3 justify-content-center">
+                        <button
+                        onClick={(e) => {
+                            handleDelete(itineray._id);
+                        }}
+                        className="btn btn-sm btn-outline-danger mx-1"
+                        >
+                        Delete
+                        </button>
+                    </td>
+
                     </tr>
                 ))}
                 </tbody>
