@@ -1,4 +1,3 @@
-// export default Persons;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
@@ -9,7 +8,7 @@ const UserList = (props) => {
     const [topic, setTopic] = useState("");
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState(60);
-    // const [scheduleFor, setScheduleFor] = useState("");
+    const [scheduleFor, setScheduleFor] = useState("");
     const [contactEmail, setContactEmail] = useState("");
     const [timezone, setTimezone] = useState("America/Los_Angeles");
     const [hostVideo, setHostVideo] = useState(true);
@@ -18,9 +17,24 @@ const UserList = (props) => {
     const [watermark, setWatermark] = useState(true);
     const [autoRecording, setAutoRecording] = useState("local");
     const [audio, setAudio] = useState("both");
-    const [registrantsEmailNotification, setRegistrantsEmailNotification] = useState(false);
-    const [registrantsConfirmationEmail, setRegistrantsConfirmationEmail] = useState(true);
     const history = useHistory();
+    const [contactArray, setContactArray] = useState([]);
+    const [checked, setChecked] = useState([false]);
+    
+    const [mailerState, setMailerState] = useState({
+        name: "",
+        email: "",
+        message: "",
+    });
+
+    function handleStateChange(e) {
+        setMailerState((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    }
+    
+
 
     useEffect(() => {
 
@@ -38,13 +52,25 @@ const UserList = (props) => {
             .catch(console.log);
     }, [needsUpdate]);
 
+    const handleClick = () => setChecked(!checked);
+
+    const handleTest = (email) => {
+        if (checked) {
+            setContactArray([...contactArray, email]);
+        }
+        console.log(contactArray);
+
+    }
+
+
+
     const zoomPost = (e) => {
         e.preventDefault();
         const newMeeting = {
             topic: topic,
             start_time: startTime,
             duration,
-            // schedule_for:scheduleFor,
+            schedule_for:scheduleFor,
             contact_email: contactEmail,
             timezone,
             host_video: hostVideo,
@@ -52,17 +78,19 @@ const UserList = (props) => {
             mute_upon_entry: muteUponEntry,
             watermark,
             auto_recording: autoRecording,
-            audio,
-            registrants_email_notification: registrantsEmailNotification,
-            registrants_confirmation_email: registrantsConfirmationEmail
+            audio
         }
+        let zoomMeetinId = "";
         console.log("new Meeting:", newMeeting);
         axios
             .post("http://localhost:8000/api/zoom/new", newMeeting, {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log("Zoom create meetinf response", res.data);
+                console.log("Zoom create meeting response", res.data);
+                zoomMeetinId = `${res.data.join_url}`;
+                console.log(zoomMeetinId);
+                submitEmail(zoomMeetinId, e);
             })
             .catch((err) => {
                 console.log("error with zoom API")
@@ -80,6 +108,39 @@ const UserList = (props) => {
                 console.log(err);
             })
     }
+
+    const submitEmail = async (zoomMeetinId, e) => {
+        
+        console.log({ mailerState });
+        const response = await fetch("http://localhost:8000/send", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({ mailerState }),
+            })
+            .then((res) => res.json())
+            .then(async (res) => {
+                const resData = await res;
+                console.log(resData);
+                if (resData.status === "success") {
+                alert("Message Sent");
+                } else if (resData.status === "fail") {
+                alert("Message failed to send");
+                }
+            })
+            .then(() => {
+                contactArray.map((contact) => {
+                    console.log(contact);
+                    setMailerState({
+                        email: contact,
+                        name: contact,
+                        message: zoomMeetinId,
+                })
+                    
+            });
+        });
+    };
 
     const handleDelete = (delId) => {
         axios
@@ -133,6 +194,43 @@ const UserList = (props) => {
             <br/>
             <br/>
             <form onSubmit={zoomPost}>
+                <h3>{person.uFirstName}'s itineraries:</h3>
+                <Link to="/Departments/Contacts/new">New Contact</Link>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Select</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Created On</th>
+                            <th />
+                        </tr>
+                        {person.itinerays.map((itineray) => (
+                            <tr key={itineray._id}>
+                                <input type="checkbox" OnCLick={handleClick} onChange={(e) => { 
+                                    handleTest(itineray.email);
+                                }}
+                                />
+                                <td>{itineray.firstName}</td>
+                                <td>{itineray.email}</td>
+                                <td>{itineray.createdAt}</td>
+                                <td className="row mt-3 justify-content-center">
+                                    <button
+                                        onClick={(e) => {
+                                            handleDelete(itineray._id);
+                                        }}
+                                        className="btn btn-sm btn-outline-danger mx-1"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                                <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
                 <label>Topic: </label>
                 <input onChange={(e) => {setTopic(e.target.value)}} type="text" value={topic} />
                 <br/>
@@ -141,8 +239,9 @@ const UserList = (props) => {
                 <br/>
                 <label>Duration: </label>
                 <input onChange={(e) => { setDuration(e.target.value) }} type="number" value={duration} />
-                {/* <label>Schedule For: </label>
-                <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} /> */}
+                <br/>
+                <label>Schedule For: </label>
+                <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} />
                 <br/>
                 <label>Email contact: </label>
                 <input onChange={(e) => {setContactEmail(e.target.value)}} type="text" value={contactEmail} />
@@ -188,17 +287,6 @@ const UserList = (props) => {
                     <option value="voip">Viop</option>
                 </select>
                 <br/>
-                <label>Registrants Email Notification: </label>
-                <select type="boolean" onChange={(e) => { setRegistrantsEmailNotification(e.target.value) }}>
-                    <option value={true}>True</option>
-                    <option value={false}>False</option>
-                </select>
-                <br/>
-                <label>Registrants Confirmation Email: </label>
-                <select type="boolean" onChange={(e) => { setRegistrantsConfirmationEmail(e.target.value) }}>
-                    <option value={true}>True</option>
-                    <option value={false}>False</option>
-                </select>
                 <br/>
                 <button type="Submit">Submit</button>
             </form>

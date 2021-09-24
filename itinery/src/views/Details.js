@@ -4,10 +4,14 @@ import { Link, useHistory, useParams } from "react-router-dom";
 
 const Details = (props) => {
     const [itineray, setItineray] = useState([]);
+    const [needsUpdate, setNeedsUpdate] = useState(false);
     const { id } = useParams();
     const history = useHistory();
 
     useEffect(() => {
+        if (needsUpdate == true) {
+            setNeedsUpdate(false);
+        };
         axios
             .get(`http://localhost:8000/api/itinerays/${id}`, { withCredentials: true, })
             .then((res) => {
@@ -38,11 +42,13 @@ const Details = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                const filteredItinerays = itineray.filter((itin) => {
-                    return itin._id !== delId;
-                });
+                // const filteredItinerays = itineray.filter((itin) => {
+                //     return itin._id !== delId;
+                // });
 
-                setItineray(filteredItinerays);
+                // setItineray(filteredItinerays);
+                setNeedsUpdate(true);
+                history.push("/Departments/Contacts", "section1");
             })
             .catch((err) => {
                 console.log(err.response);
@@ -74,7 +80,7 @@ const Details = (props) => {
             </div>
 
             <div>
-                <Link to={`/ Departments / Contacts / ${itineray._id} / edit`}>Edit</Link>
+                <Link to={`/Departments/Contacts/${itineray._id}/edit`}>Edit</Link>
                 <button onClick={(e) => {
                     handleDelete(itineray._id); //no need for pet._id cus we already have the id info in this page
                 }}>Delete</button>

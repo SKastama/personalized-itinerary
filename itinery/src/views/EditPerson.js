@@ -16,7 +16,7 @@ const EditPerson = (props) => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8000/api/itinerays/" + id)
+            .get("http://localhost:8000/api/itinerays/" + id, { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
                 setTitle(res.data.title);
@@ -35,12 +35,12 @@ const EditPerson = (props) => {
         e.preventDefault();
 
         const NewPerson = {
-            title: title,
-            firstName: firstName,
-            lastName: lastName,
-            phone: phone,
-            department: department,
-            email: email
+            title,
+            firstName,
+            lastName,
+            phone,
+            department,
+            email
         };
 
         axios
@@ -49,7 +49,7 @@ const EditPerson = (props) => {
             })
             .then((res) => {
                 console.log(res.data);
-                history.push(`/Departments/Contacts/${res.data._id}`);
+                history.push("/Departments/Contacts", "section1");
             })
             .catch((err) => {
                 setErrors(err.response.data.errors);
@@ -62,10 +62,11 @@ const EditPerson = (props) => {
             handleEditPersonSubmit(e);
         }}
         >
+            <label>Departments</label>
             <select onChange={(e) => {
                 setDepartment(e.target.value)
             }}
-                type="text" value={department}>Departments
+                type="text" value={department}>
                 <option>Development</option>
                 <option>Business Development</option>
                 <option>Sales & Marketing</option>

@@ -53,11 +53,11 @@ module.exports = {
     logout(req, res) {
         res.clearCookie("usertoken");
         res.json({ msg: "usertoken cookie cleared" });
-    },
+    }, 
 
     getLoggedInUser(req, res) {
         const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
-
+        console.log("hi");
         User.findById(decodedJWT.payload._id)
             .then((user) => res.json(user))
             .catch((err) => res.json(err));
@@ -140,28 +140,26 @@ module.exports = {
     },
 
     update(req, res) {
-        console.log("update method executed", "url params:", req.params);
+        console.log("update method executed");
+        // , "url params:", req.params);
         const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
         User.findByIdAndUpdate(
-            decodedJWT.payload._id,
-            req.params.id,
-            req.body,
-            {
-                $put: {
-                    itineray: new Itineray(req.body)
-                }
-            },
-            { multi: true },
-            {
-                runValidators: true,
-                new: true,
-            })
-            .then((updatedItineray) => {
-                res.json({ itineray: updatedItineray });
-            })
-            .catch((err) => {
-                res.status(400).json(err);
-            });
+            decodedJWT.payload._id, {
+                // req.body,
+                $set: { itinerays: req.params.id }
+            }
+                // { multi: true },
+                // {
+                //     runValidators: true,
+                //     new: true,
+                // })
+                .then((updateUser) => {
+                    res.json({ user: updateUser });
+                })
+                .catch((err) => {
+                    res.status(400).json(err);
+                })
+        )
     },
 
     zoom(req, res) {
@@ -169,14 +167,14 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${process.env.ZOOM_TOKEN}`
             }
-            })
+        })
             .then((zoomRes) => {
-            console.log("zoom", zoomRes.data)
-            res.json(zoomRes.data)
+                console.log("zoom", zoomRes.data)
+                res.json(zoomRes.data)
             })
             .catch((zoomError) => {
-            console.error("zoom", zoomError.response)
-            res.status(400).json(zoomError)
+                console.error("zoom", zoomError.response)
+                res.status(400).json(zoomError)
             })
     },
     zoomPost(req, res) {
@@ -184,14 +182,14 @@ module.exports = {
             headers: {
                 'Authorization': `Bearer ${process.env.ZOOM_TOKEN}`
             }
-            })
+        })
             .then((zoomRes) => {
-            console.log("zoom", zoomRes.data)
-            res.json(zoomRes.data)
+                console.log("zoom", zoomRes.data)
+                res.json(zoomRes.data)
             })
             .catch((zoomError) => {
-            console.error("zoom", zoomError.response)
-            res.status(400).json(zoomError)
+                console.error("zoom", zoomError.response)
+                res.status(400).json(zoomError)
             })
     }
 
