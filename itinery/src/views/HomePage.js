@@ -99,6 +99,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
+import SignOut from "./SignOut";
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
@@ -178,6 +179,14 @@ const UserList = (props) => {
             .catch((err) => {
                 console.log("error with zoom API")
             });
+    }
+
+    const LogOut = ({setLoggedOut}) =>{
+        return (
+            <div className="container-flex">
+                <SignOut setLoggedOut={setLoggedOut} />
+            </div>
+        )
     }
 
     const handleDelete = (delId) => {
