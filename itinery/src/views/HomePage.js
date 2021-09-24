@@ -164,39 +164,7 @@ const UserList = (props) => {
             <h3>{person.uFirstName}'s itineraries:</h3>
             <Link to="/Departments/Contacts/new">New Contact</Link>
             <button onClick = {LogOut}>LogOut</button>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Created On</th>
-                        <th />
-                    </tr>
-                    {person.itinerays.map((itineray) => (
-                        <tr key={itineray._id}>
-                            <td>{itineray.firstName}</td>
-                            <td>{itineray.email}</td>
-                            <td>{itineray.createdAt}</td>
-                            <td className="row mt-3 justify-content-center">
-                                <button
-                                    onClick={(e) => {
-                                        handleDelete(itineray._id);
-                                    }}
-                                    className="btn btn-sm btn-outline-danger mx-1"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                            <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <br/>
-            <br/>
             <form onSubmit={zoomPost}>
-                <h3>{person.uFirstName}'s itineraries:</h3>
-                <Link to="/Departments/Contacts/new">New Contact</Link>
                 <table>
                     <tbody>
                         <tr>
