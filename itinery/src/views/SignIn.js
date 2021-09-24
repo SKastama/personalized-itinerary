@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -25,7 +25,7 @@ const SignIn = () => {
     const [uEmail, setUEmail] = useState("");
     const [uPassword, setUPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const theme = createTheme();    
+    const theme = createTheme();
 
     const login = (event) => {
         event.preventDefault();
@@ -49,65 +49,65 @@ const SignIn = () => {
     };
 
     return (
-    <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-            sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            }}
-        >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-            Sign in
-            </Typography>
-            <Box component="form" noValidate onSubmit={login} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                <TextField
-                    required
-                    fullWidth
-                    type="email"
-                    name="uEmail"
-                    onChange={(e) => setUEmail(e.target.value)}
-                    value={uEmail}
-                    label="Email Address"
-                    autoComplete="uEmail"
-                />
-                </Grid>
-                <Grid item xs={12}>
-                <TextField
-                    required
-                    fullWidth
-                    type="password"
-                    name="uPassword"
-                    onChange={(e) => setUPassword(e.target.value)}
-                    value={uPassword}
-                    label="Password"
-                    autoComplete="new-uPassword"
-                />
-                </Grid>
-            </Grid>
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-            >
-                Sign In
-            </Button>
-            </Box>
-        </Box>
-        <p className="error-message">{errorMessage ? errorMessage : ""}</p>
-        </Container>
-    </ThemeProvider>
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={login} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    type="email"
+                                    name="uEmail"
+                                    onChange={(e) => setUEmail(e.target.value)}
+                                    value={uEmail}
+                                    label="Email Address"
+                                    autoComplete="uEmail"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    type="password"
+                                    name="uPassword"
+                                    onChange={(e) => setUPassword(e.target.value)}
+                                    value={uPassword}
+                                    label="Password"
+                                    autoComplete="new-uPassword"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+                    </Box>
+                </Box>
+                <p className="error-message">{errorMessage ? errorMessage : ""}</p>
+            </Container>
+        </ThemeProvider>
     );
-    }
+}
 
 export default SignIn;
 
