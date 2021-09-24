@@ -38,7 +38,6 @@ const UserList = (props) => {
 
 
     useEffect(() => {
-
         if (needsUpdate == true) {
             setNeedsUpdate(false);
         };
@@ -111,7 +110,6 @@ const UserList = (props) => {
     }
 
     const submitEmail = async (zoomMeetinId, e) => {
-        
         console.log({ mailerState });
         const response = await fetch("http://localhost:8000/send", {
             method: "POST",
@@ -138,6 +136,7 @@ const UserList = (props) => {
                         name: contact,
                         message: zoomMeetinId,
                 })
+
                     
             });
         });
@@ -176,7 +175,7 @@ const UserList = (props) => {
                         </tr>
                         {person.itinerays.map((itineray) => (
                             <tr key={itineray._id}>
-                                <input type="checkbox" OnCLick={handleClick} onChange={(e) => { 
+                                <input type="checkbox" onClick={handleClick} onChange={(e) => { 
                                     handleTest(itineray.email);
                                 }}
                                 />

@@ -1,8 +1,8 @@
 import './App.css';
 import { Redirect, Route, Switch } from "react-router-dom";
 import React, { useState } from "react";
-import Persons from "./views/HomePage";
-import NewPerson from "./views/NewPerson";
+import UserList2 from "./views/HomePage2";
+import NewPerson2 from "./views/NewPerson2";
 // import Login from "./views/Login";
 import Details from "./views/Details";
 import NodeMailer from "./views/NodeMailer";
@@ -30,11 +30,11 @@ function App() {
         </Route>
 
         <Route exact path="/Departments/Contacts">
-          <Persons />
+          <UserList2 />
         </Route>
 
         <Route exact path="/Departments/Contacts/new">
-          <NewPerson />
+          <NewPerson2 />
         </Route>
 
         <Route exact path="/Departments/Contacts/:id">
