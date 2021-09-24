@@ -1,101 +1,3 @@
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-
-
-// const Persons = (props) => {
-
-//     const [person, ] = useState([]);
-//     const tableStyle = {
-//         "border": "1px solid black",
-//         "box-boder": "1px solid black",
-//         "text-align": "center",
-//         "margin-left": "auto",
-//         "margin-right": "auto",
-//         "width": "2000px",
-//         "justify-content": "space-between",
-//     };
-
-//     useEffect(() => {
-//         axios
-//             .get("http://localhost:8000/api/itinerays/all")
-//             .then((res) => {
-//                 (res.data);
-//             })
-//             .catch((err) => {
-//                 console.log(err);
-//             });
-//     }, []);
-
-//     const handleDelete = (delId) => {
-//         axios
-//             .delete("http://localhost:8000/api/itinerays/" + delId)
-//             .then((res) => {
-//                 // It has successfully been deleted from the DATABASE
-//                 // It is still IN our state, we need to remove it from state.
-//                 const filteredsetPersons = person.filter((per) => {
-//                     return per._id !== delId;
-//                 });
-
-//                 (filteredsetPersons);
-//             })
-//             .catch((err) => {
-//                 console.log(err.response);
-//             });
-//     };
-
-
-//     return (
-//         <div>
-//             <Link to="/Departments/Contacts/new">New Contact</Link>
-//             <h2>Department Contacts</h2>
-//             <div>
-//                 <table style={tableStyle}>
-//                     <thead>
-//                         <tr>
-//                             <th></th>
-//                             <th>Department:</th>
-//                             <th>Title:</th>
-//                             <th>Name:</th>
-//                             <th>Action:</th>
-//                             <th>Schedules:</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         {person.map((per) => {
-//                             return (
-//                                 <tr>
-//                                     <td>
-//                                         <input type="checkbox" onClick="" />
-//                                     </td>
-//                                     <td>{per.department}</td>
-//                                     <td>{per.title}</td>
-//                                     <td>{per.lastName}, {per.firstName}</td>
-//                                     <td>
-//                                         <Link to={`/Departments/Contacts/${per._id}`}>Details</ Link>
-//                                         <Link to={`/Departments/Contacts/${per._id}/edit`}>
-//                                             <h4>Edit</h4>
-//                                         </Link>
-//                                         <button onClick={(e) => {
-//                                             handleDelete(per._id)
-//                                         }}>Delete</button>
-//                                     </td>
-//                                     <td>
-//                                         <button onClick="">Join Meeting</button>
-//                                         <button onClick="">Meeting Reminder</button>
-//                                     </td>
-//                                 </tr>
-//                             )
-//                         })}
-//                     </tbody>
-//                 </table>
-//             </div>
-
-//         </div >
-//     )
-// }
-
-// export default Persons;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
@@ -106,7 +8,7 @@ const UserList = (props) => {
     const [topic, setTopic] = useState("");
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState(60);
-    // const [scheduleFor, setScheduleFor] = useState("");
+    const [scheduleFor, setScheduleFor] = useState("");
     const [contactEmail, setContactEmail] = useState("");
     const [timezone, setTimezone] = useState("America/Los_Angeles");
     const [hostVideo, setHostVideo] = useState(true);
@@ -115,26 +17,26 @@ const UserList = (props) => {
     const [watermark, setWatermark] = useState(true);
     const [autoRecording, setAutoRecording] = useState("local");
     const [audio, setAudio] = useState("both");
-    const [registrantsEmailNotification, setRegistrantsEmailNotification] = useState(false);
-    const [registrantsConfirmationEmail, setRegistrantsConfirmationEmail] = useState(true);
     const history = useHistory();
+    const [contactArray, setContactArray] = useState([]);
+    const [checked, setChecked] = useState([false]);
+    
+    const [mailerState, setMailerState] = useState({
+        name: "",
+        email: "",
+        message: "",
+    });
+
+    function handleStateChange(e) {
+        setMailerState((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    }
     
 
+
     useEffect(() => {
-//         axios
-//         .get("http://localhost:8000/api/zoom", {
-//             withCredentials: true,
-//         })
-//         .then((res) => {
-//             console.log(res.data);
-//         })
-//         .catch((err) =>{
-//             console.log("error with zoom API")
-//         });
-        
-//         if (needsUpdate == true) {
-//             setNeedsUpdate(false);
-//         };
         if (needsUpdate == true) {
             setNeedsUpdate(false);
         };
@@ -149,13 +51,25 @@ const UserList = (props) => {
             .catch(console.log);
     }, [needsUpdate]);
 
+    const handleClick = () => setChecked(!checked);
+
+    const handleTest = (email) => {
+        if (checked) {
+            setContactArray([...contactArray, email]);
+        }
+        console.log(contactArray);
+
+    }
+
+
+
     const zoomPost = (e) => {
         e.preventDefault();
         const newMeeting = {
             topic: topic,
             start_time: startTime,
             duration,
-            // schedule_for:scheduleFor,
+            schedule_for:scheduleFor,
             contact_email: contactEmail,
             timezone,
             host_video: hostVideo,
@@ -163,10 +77,9 @@ const UserList = (props) => {
             mute_upon_entry: muteUponEntry,
             watermark,
             auto_recording: autoRecording,
-            audio,
-            registrants_email_notification: registrantsEmailNotification,
-            registrants_confirmation_email: registrantsConfirmationEmail
+            audio
         }
+        let zoomMeetinId = "";
         console.log("new Meeting:", newMeeting);
         axios
             .post("http://localhost:8000/api/zoom/new", newMeeting, {
@@ -174,11 +87,47 @@ const UserList = (props) => {
             })
             .then((res) => {
                 console.log("Zoom create meetinf response", res.data);
+                zoomMeetinId = `${res.data.join_url}`;
+                console.log(zoomMeetinId);
+                submitEmail(zoomMeetinId, e);
             })
             .catch((err) => {
                 console.log("error with zoom API")
             });
     }
+
+    const submitEmail = async (zoomMeetinId, e) => {
+        
+        console.log({ mailerState });
+        const response = await fetch("http://localhost:8000/send", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({ mailerState }),
+            })
+            .then((res) => res.json())
+            .then(async (res) => {
+                const resData = await res;
+                console.log(resData);
+                if (resData.status === "success") {
+                alert("Message Sent");
+                } else if (resData.status === "fail") {
+                alert("Message failed to send");
+                }
+            })
+            .then(() => {
+                contactArray.map((contact) => {
+                    console.log(contact);
+                    setMailerState({
+                        email: contact,
+                        name: contact,
+                        message: zoomMeetinId,
+                })
+                    
+            });
+        });
+    };
 
     const handleDelete = (delId) => {
         axios
@@ -186,11 +135,6 @@ const UserList = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                // const filteredItinerays = person.Itinerays.filter((itin) => {
-                //     return itin._id !== delId;
-                // });
-                // console.log(filteredItinerays)
-                // setPerson(filteredItinerays);
                 setNeedsUpdate(true);
             })
             .catch((err) => {
@@ -201,41 +145,47 @@ const UserList = (props) => {
     if (person === null) {
         return "Loading...";
     }
+
     return (
         <div className="container" id="section1">
-            <h3>{person.uFirstName}'s itineraries:</h3>
-            <Link to="/Departments/Contacts/new">New Contact</Link>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Created On</th>
-                        <th />
-                    </tr>
-                    {person.itinerays.map((itineray) => (
-                        <tr key={itineray._id}>
-                            <td>{itineray.firstName}</td>
-                            <td>{itineray.email}</td>
-                            <td>{itineray.createdAt}</td>
-                            <td className="row mt-3 justify-content-center">
-                                <button
-                                    onClick={(e) => {
-                                        handleDelete(itineray._id);
-                                    }}
-                                    className="btn btn-sm btn-outline-danger mx-1"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                            <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <br/>
-            <br/>
             <form onSubmit={zoomPost}>
+                <h3>{person.uFirstName}'s itineraries:</h3>
+                <Link to="/Departments/Contacts/new">New Contact</Link>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Select</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Created On</th>
+                            <th />
+                        </tr>
+                        {person.itinerays.map((itineray) => (
+                            <tr key={itineray._id}>
+                                <input type="checkbox" OnCLick={handleClick} onChange={(e) => { 
+                                    handleTest(itineray.email);
+                                }}
+                                />
+                                <td>{itineray.firstName}</td>
+                                <td>{itineray.email}</td>
+                                <td>{itineray.createdAt}</td>
+                                <td className="row mt-3 justify-content-center">
+                                    <button
+                                        onClick={(e) => {
+                                            handleDelete(itineray._id);
+                                        }}
+                                        className="btn btn-sm btn-outline-danger mx-1"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                                <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
                 <label>Topic: </label>
                 <input onChange={(e) => {setTopic(e.target.value)}} type="text" value={topic} />
                 <br/>
@@ -244,8 +194,9 @@ const UserList = (props) => {
                 <br/>
                 <label>Duration: </label>
                 <input onChange={(e) => { setDuration(e.target.value) }} type="number" value={duration} />
-                {/* <label>Schedule For: </label>
-                <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} /> */}
+                <br/>
+                <label>Schedule For: </label>
+                <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} />
                 <br/>
                 <label>Email contact: </label>
                 <input onChange={(e) => {setContactEmail(e.target.value)}} type="text" value={contactEmail} />
@@ -291,17 +242,6 @@ const UserList = (props) => {
                     <option value="voip">Viop</option>
                 </select>
                 <br/>
-                <label>Registrants Email Notification: </label>
-                <select type="boolean" onChange={(e) => { setRegistrantsEmailNotification(e.target.value) }}>
-                    <option value={true}>True</option>
-                    <option value={false}>False</option>
-                </select>
-                <br/>
-                <label>Registrants Confirmation Email: </label>
-                <select type="boolean" onChange={(e) => { setRegistrantsConfirmationEmail(e.target.value) }}>
-                    <option value={true}>True</option>
-                    <option value={false}>False</option>
-                </select>
                 <br/>
                 <button type="Submit">Submit</button>
             </form>
