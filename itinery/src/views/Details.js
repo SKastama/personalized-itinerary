@@ -68,7 +68,7 @@ const Details = (props) => {
             </div>
 
             <div>
-                <Link to={`/ Departments / Contacts / ${itineray._id} / edit`}>Edit</Link>
+                <Link to={`/Departments/Contacts/${itineray._id}/edit`}>Edit</Link>
                 <button onClick={(e) => {
                     handleDelete(itineray._id); //no need for pet._id cus we already have the id info in this page
                 }}>Delete</button>
