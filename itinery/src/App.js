@@ -5,6 +5,7 @@ import Persons from "./views/HomePage";
 import NewPerson from "./views/NewPerson";
 // import Login from "./views/Login";
 import Details from "./views/Details";
+import NodeMailer from "./views/NodeMailer";
 import EditPerson from './views/EditPerson';
 import SignUp from './views/SignUp';
 import LogReg from "./views/LogReg";
@@ -17,6 +18,10 @@ function App() {
 
         <Route exact path="/Departments/admin">
           <LogReg setLoggedIn={() => setIsLoggedIn(true)} path="/" />
+        </Route>
+
+        <Route exact path="/send">
+          <NodeMailer />
         </Route>
 
         <Route exact path="/Departments/admin/signup">

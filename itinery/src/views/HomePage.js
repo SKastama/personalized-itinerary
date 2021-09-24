@@ -99,20 +99,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
-import {zoomToken} from "../config.json";
+// import {zoomToken} from "../config.json";
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
     const [needsUpdate, setNeedsUpdate] = useState(false);
-
-    // const getLoggedInUser = () => {
-    //     axios
-    //     .get("http://localhost:8000/api/users/loggedin", {
-    //         withCredentials: true,
-    //     })
-    //     .then((res) => console.log("loggin"))
-    //     .catch(console.log);
-    // };
     const [topic, setTopic] = useState("");
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState(60);
@@ -128,32 +119,9 @@ const UserList = (props) => {
     const [registrantsEmailNotification, setRegistrantsEmailNotification] = useState(false);
     const [registrantsConfirmationEmail, setRegistrantsConfirmationEmail] = useState(true);
     const history = useHistory();
+    
 
     useEffect(() => {
-        if (needsUpdate == true) {
-            setNeedsUpdate(false);
-        };
-        axios
-
-            .get("http://localhost:8000/api/users/loggedin", {
-                withCredentials: true,
-            })
-            .then((res) => {
-                setPerson(res.data);
-                console.log(res.data);
-            })
-            .catch(console.log);
-    }, [needsUpdate]);
-
-        .get("http://localhost:8000/api/users/loggedin", {
-            withCredentials: true,
-        })
-        .then((res) => {
-            setPerson(res.data);
-            console.log(res.data);
-        })
-        .catch(console.log);
-
         axios
         .get("http://localhost:8000/api/zoom", {
             withCredentials: true,
@@ -165,7 +133,22 @@ const UserList = (props) => {
             console.log("error with zoom API")
         });
         
-    }, []);
+        if (needsUpdate == true) {
+            setNeedsUpdate(false);
+        };
+        axios
+            .get("http://localhost:8000/api/users/loggedin", {
+                withCredentials: true,
+            })
+            .then((res) => {
+                setPerson(res.data);
+                console.log(res.data);
+            })
+            .catch(console.log);
+    }, [needsUpdate]);
+
+        
+    
 
     const zoomPost = (e) => {
         e.preventDefault();
@@ -251,62 +234,76 @@ const UserList = (props) => {
                     ))}
                 </tbody>
             </table>
-
+            <br/>
+            <br/>
             <form onSubmit={zoomPost}>
                 <label>Topic: </label>
                 <input onChange={(e) => {setTopic(e.target.value)}} type="text" value={topic} />
+                <br/>
                 <label>Start Time: </label>
                 <input onChange={(e) => {setStartTime(e.target.value)}} type="date" value={startTime} />
+                <br/>
                 <label>Duration: </label>
                 <input onChange={(e) => {setDuration(e.target.value)}} type="number" value={duration} />
                 {/* <label>Schedule For: </label>
                 <input onChange={(e) => {setScheduleFor(e.target.value)}} type="text" value={scheduleFor} /> */}
+                <br/>
                 <label>Email contact: </label>
                 <input onChange={(e) => {setContactEmail(e.target.value)}} type="text" value={contactEmail} />
+                <br/>
                 <label>Timezone: </label>
                 <input onChange={(e) => {setTimezone(e.target.value)}} type="text" value={timezone} />
+                <br/>
                 <label>Host Video: </label>
                 <select type="text" onChange={(e) => {setHostVideo(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <label>Participant Video: </label>
                 <select type="text" onChange={(e) => {setParticipantVideo(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <label>Mute Upon Entry: </label>
                 <select type="text" onChange={(e) => {setMuteUponEntry(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <label>Watermark: </label>
                 <select type="" onChange={(e) => {setWatermark(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <label>Auto Recording: </label>
                 <select type="text" onChange={(e) => {setAutoRecording(e.target.value)}}>
                     <option value="local">Local</option>
                     <option value="cloud">Cloud</option>
                     <option value="none">None</option>
                 </select>
+                <br/>
                 <label>Audio: </label>
                 <select type="text" onChange={(e) => {setAudio(e.target.value)}}>
                     <option value="both">Both</option>
                     <option value="telephony">Telephony</option>
                     <option value="voip">Viop</option>
                 </select>
+                <br/>
                 <label>Registrants Email Notification: </label>
                 <select type="boolean" onChange={(e) => {setRegistrantsEmailNotification(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <label>Registrants Confirmation Email: </label>
                 <select type="boolean" onChange={(e) => {setRegistrantsConfirmationEmail(e.target.value)}}>
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
+                <br/>
                 <button type="Submit">Submit</button>
             </form>
         </div>
