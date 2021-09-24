@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 // #comment food
 
+
 //Joseph's styling imports start here:
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
@@ -24,6 +25,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 //Joseph's styling imports end here.
+
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
@@ -182,6 +184,7 @@ const UserList = (props) => {
         return "Loading...";
     }
 
+
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
 
@@ -195,7 +198,7 @@ const UserList = (props) => {
         }));
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} id="section1">
             <h1 style={{fontFamily: "Roboto"}}>{person.uFirstName}'s Itineraries:</h1>
             <Link to="/Departments/Contacts/new">New Contact</Link>
             <br/>
@@ -204,15 +207,16 @@ const UserList = (props) => {
             <br/><br /><br/>
 
                 <Table style={{fontWeight: "bold"}} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                <tbody style={{ border: "solid"}}>
-                <TableRow style={{ backgroundColor: "black", color: "white"}}>
-                    <StyledTableCell/>
-                    <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Username</StyledTableCell>
-                    <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Email</StyledTableCell>
-                    <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Created On</StyledTableCell>
-                    <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Other Actions</StyledTableCell>
-                    <StyledTableCell/>
-                </TableRow>
+                  <tbody style={{ border: "solid"}}>
+                  <TableRow style={{ backgroundColor: "black", color: "white"}}>
+                      <StyledTableCell/>
+                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Username</StyledTableCell>
+                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Email</StyledTableCell>
+                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Created On</StyledTableCell>
+                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Other Actions</StyledTableCell>
+                      <StyledTableCell/>
+                  </TableRow>
+
                         {person.itinerays.map((itineray) => (
                             <tr key={itineray._id}>
                                 <input type="checkbox" style={{margin: "20px 5px 5px 5px"}} OnCLick={handleClick} onChange={(e) => { 

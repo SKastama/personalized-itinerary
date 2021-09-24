@@ -48,10 +48,11 @@ const EditPerson = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res.data);
+                console.log("updatedItineray", res.data);
                 history.push("/Departments/Contacts", "section1");
             })
             .catch((err) => {
+                console.log("errorupdateItineray", err.response)
                 setErrors(err.response.data.errors);
             });
     };
