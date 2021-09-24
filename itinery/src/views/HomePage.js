@@ -160,10 +160,10 @@ const UserList = (props) => {
 
     return (
         <div className="container" id="section1">
+            <h3>{person.uFirstName}'s itineraries:</h3>
+            <Link to="/Departments/Contacts/new">New Contact</Link>
+            <button onClick = {LogOut}>LogOut</button>
             <form onSubmit={zoomPost}>
-                <h3>{person.uFirstName}'s itineraries:</h3>
-                <Link to="/Departments/Contacts/new">New Contact</Link>
-                <button onClick = {LogOut}>LogOut</button>
                 <table>
                     <tbody>
                         <tr>
