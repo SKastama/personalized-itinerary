@@ -1,7 +1,7 @@
 import './App.css';
 import { Redirect, Route, Switch } from "react-router-dom";
 import React, { useState } from "react";
-import UserList2 from "./views/HomePage2";
+import Persons from "./views/HomePage";
 import NewPerson2 from "./views/NewPerson2";
 // import Login from "./views/Login";
 import Details from "./views/Details";
@@ -30,7 +30,7 @@ function App() {
         </Route>
 
         <Route exact path="/Departments/Contacts">
-          <UserList2 />
+          <Persons />
         </Route>
 
         <Route exact path="/Departments/Contacts/new">
