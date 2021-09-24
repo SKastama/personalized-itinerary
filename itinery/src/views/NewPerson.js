@@ -33,8 +33,21 @@ const NewPerson = (props) => {
                 console.log(err.response)
             });
     }
+    const LogOut = () =>{
+        axios
+            .post("http://localhost:8000/api/logout")
+            .then((res)=>{
+                console.log(res);
+                history.push("/Departments/admin");
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    }
+
     return (
         <div>
+            <button onClick = {LogOut}>LogOut</button>
             <form onSubmit={(e) => {
                 handleNewSubmit(e);
             }}>

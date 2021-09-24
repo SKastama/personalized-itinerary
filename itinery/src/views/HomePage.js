@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
+// #comment food
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
@@ -37,6 +38,7 @@ const UserList = (props) => {
 
 
     useEffect(() => {
+
         if (needsUpdate == true) {
             setNeedsUpdate(false);
         };
@@ -86,7 +88,7 @@ const UserList = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log("Zoom create meetinf response", res.data);
+                console.log("Zoom create meeting response", res.data);
                 zoomMeetinId = `${res.data.join_url}`;
                 console.log(zoomMeetinId);
                 submitEmail(zoomMeetinId, e);
@@ -94,6 +96,18 @@ const UserList = (props) => {
             .catch((err) => {
                 console.log("error with zoom API")
             });
+    }
+
+    const LogOut = () =>{
+        axios
+            .post("http://localhost:8000/api/logout")
+            .then((res)=>{
+                console.log(res);
+                history.push("/Departments/admin");
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
     }
 
     const submitEmail = async (zoomMeetinId, e) => {
@@ -145,9 +159,41 @@ const UserList = (props) => {
     if (person === null) {
         return "Loading...";
     }
-
     return (
         <div className="container" id="section1">
+            <h3>{person.uFirstName}'s itineraries:</h3>
+            <Link to="/Departments/Contacts/new">New Contact</Link>
+            <button onClick = {LogOut}>LogOut</button>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Created On</th>
+                        <th />
+                    </tr>
+                    {person.itinerays.map((itineray) => (
+                        <tr key={itineray._id}>
+                            <td>{itineray.firstName}</td>
+                            <td>{itineray.email}</td>
+                            <td>{itineray.createdAt}</td>
+                            <td className="row mt-3 justify-content-center">
+                                <button
+                                    onClick={(e) => {
+                                        handleDelete(itineray._id);
+                                    }}
+                                    className="btn btn-sm btn-outline-danger mx-1"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                            <td><Link to={`/Departments/Contacts/${itineray._id}`}>View</Link></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <br/>
+            <br/>
             <form onSubmit={zoomPost}>
                 <h3>{person.uFirstName}'s itineraries:</h3>
                 <Link to="/Departments/Contacts/new">New Contact</Link>
