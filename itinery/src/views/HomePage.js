@@ -1,105 +1,7 @@
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-
-
-// const Persons = (props) => {
-
-//     const [person, ] = useState([]);
-//     const tableStyle = {
-//         "border": "1px solid black",
-//         "box-boder": "1px solid black",
-//         "text-align": "center",
-//         "margin-left": "auto",
-//         "margin-right": "auto",
-//         "width": "2000px",
-//         "justify-content": "space-between",
-//     };
-
-//     useEffect(() => {
-//         axios
-//             .get("http://localhost:8000/api/itinerays/all")
-//             .then((res) => {
-//                 (res.data);
-//             })
-//             .catch((err) => {
-//                 console.log(err);
-//             });
-//     }, []);
-
-//     const handleDelete = (delId) => {
-//         axios
-//             .delete("http://localhost:8000/api/itinerays/" + delId)
-//             .then((res) => {
-//                 // It has successfully been deleted from the DATABASE
-//                 // It is still IN our state, we need to remove it from state.
-//                 const filteredsetPersons = person.filter((per) => {
-//                     return per._id !== delId;
-//                 });
-
-//                 (filteredsetPersons);
-//             })
-//             .catch((err) => {
-//                 console.log(err.response);
-//             });
-//     };
-
-
-//     return (
-//         <div>
-//             <Link to="/Departments/Contacts/new">New Contact</Link>
-//             <h2>Department Contacts</h2>
-//             <div>
-//                 <table style={tableStyle}>
-//                     <thead>
-//                         <tr>
-//                             <th></th>
-//                             <th>Department:</th>
-//                             <th>Title:</th>
-//                             <th>Name:</th>
-//                             <th>Action:</th>
-//                             <th>Schedules:</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         {person.map((per) => {
-//                             return (
-//                                 <tr>
-//                                     <td>
-//                                         <input type="checkbox" onClick="" />
-//                                     </td>
-//                                     <td>{per.department}</td>
-//                                     <td>{per.title}</td>
-//                                     <td>{per.lastName}, {per.firstName}</td>
-//                                     <td>
-//                                         <Link to={`/Departments/Contacts/${per._id}`}>Details</ Link>
-//                                         <Link to={`/Departments/Contacts/${per._id}/edit`}>
-//                                             <h4>Edit</h4>
-//                                         </Link>
-//                                         <button onClick={(e) => {
-//                                             handleDelete(per._id)
-//                                         }}>Delete</button>
-//                                     </td>
-//                                     <td>
-//                                         <button onClick="">Join Meeting</button>
-//                                         <button onClick="">Meeting Reminder</button>
-//                                     </td>
-//                                 </tr>
-//                             )
-//                         })}
-//                     </tbody>
-//                 </table>
-//             </div>
-
-//         </div >
-//     )
-// }
-
 // export default Persons;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
-import SignOut from "./SignOut";
 
 const UserList = (props) => {
     const [person, setPerson] = useState(null);
@@ -119,23 +21,9 @@ const UserList = (props) => {
     const [registrantsEmailNotification, setRegistrantsEmailNotification] = useState(false);
     const [registrantsConfirmationEmail, setRegistrantsConfirmationEmail] = useState(true);
     const history = useHistory();
-    
 
     useEffect(() => {
-//         axios
-//         .get("http://localhost:8000/api/zoom", {
-//             withCredentials: true,
-//         })
-//         .then((res) => {
-//             console.log(res.data);
-//         })
-//         .catch((err) =>{
-//             console.log("error with zoom API")
-//         });
-        
-//         if (needsUpdate == true) {
-//             setNeedsUpdate(false);
-//         };
+
         if (needsUpdate == true) {
             setNeedsUpdate(false);
         };
@@ -181,12 +69,16 @@ const UserList = (props) => {
             });
     }
 
-    const LogOut = ({setLoggedOut}) =>{
-        return (
-            <div className="container-flex">
-                <SignOut setLoggedOut={setLoggedOut} />
-            </div>
-        )
+    const LogOut = () =>{
+        axios
+            .post("http://localhost:8000/api/logout")
+            .then((res)=>{
+                console.log(res);
+                history.push("/Departments/admin");
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
     }
 
     const handleDelete = (delId) => {
@@ -195,11 +87,6 @@ const UserList = (props) => {
                 withCredentials: true,
             })
             .then((res) => {
-                // const filteredItinerays = person.Itinerays.filter((itin) => {
-                //     return itin._id !== delId;
-                // });
-                // console.log(filteredItinerays)
-                // setPerson(filteredItinerays);
                 setNeedsUpdate(true);
             })
             .catch((err) => {
@@ -214,6 +101,7 @@ const UserList = (props) => {
         <div className="container" id="section1">
             <h3>{person.uFirstName}'s itineraries:</h3>
             <Link to="/Departments/Contacts/new">New Contact</Link>
+            <button onClick = {LogOut}>LogOut</button>
             <table>
                 <tbody>
                     <tr>
