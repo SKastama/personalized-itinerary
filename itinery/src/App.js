@@ -9,6 +9,7 @@ import NodeMailer from "./views/NodeMailer";
 import EditPerson from './views/EditPerson';
 import SignUp from './views/SignUp';
 import LogReg from "./views/LogReg";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
@@ -47,8 +48,6 @@ function App() {
         {/*<Route exact path="/Departments/Contact/:id">
           <Person />
         </Route>
-
-
   <Route component={NotFound} />*/}
       </Switch>
     </div>

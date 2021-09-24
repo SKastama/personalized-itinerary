@@ -24,6 +24,17 @@ const Details = (props) => {
             })
     }, [id]);
 
+    const LogOut = () =>{
+        axios
+            .post("http://localhost:8000/api/logout")
+            .then((res)=>{
+                console.log(res);
+                history.push("/Departments/admin");
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    };
 
     const handleDelete = (delId) => {
         axios
@@ -58,6 +69,7 @@ const Details = (props) => {
             marginBottom: 20,
         }}>
             <div><Link to="/Departments/Contacts">Home</Link></div>
+            <button onClick = {LogOut}>LogOut</button>
             {/* u use _id when it the id comes from the database object NOT the url :id and regular id is ONLY with urls */}
             <div style={{ padding: 15 }}>
                 <h2>{itineray.lastName} {itineray.firstName}</h2>
@@ -68,7 +80,7 @@ const Details = (props) => {
             </div>
 
             <div>
-                <Link to={`/ Departments / Contacts / ${itineray._id} / edit`}>Edit</Link>
+                <Link to={`/Departments/Contacts/${itineray._id}/edit`}>Edit</Link>
                 <button onClick={(e) => {
                     handleDelete(itineray._id); //no need for pet._id cus we already have the id info in this page
                 }}>Delete</button>
