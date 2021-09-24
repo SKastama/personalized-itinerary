@@ -20,10 +20,10 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+// import '@fontsource/roboto/300.css';
+// import '@fontsource/roboto/400.css';
+// import '@fontsource/roboto/500.css';
+// import '@fontsource/roboto/700.css';
 //Joseph's styling imports end here.
 
 
@@ -62,7 +62,6 @@ const UserList = (props) => {
 
 
     useEffect(() => {
-
         if (needsUpdate == true) {
             setNeedsUpdate(false);
         };
@@ -135,7 +134,6 @@ const UserList = (props) => {
     }
 
     const submitEmail = async (zoomMeetinId, e) => {
-        
         console.log({ mailerState });
         const response = await fetch("http://localhost:8000/send", {
             method: "POST",
@@ -162,6 +160,7 @@ const UserList = (props) => {
                         name: contact,
                         message: zoomMeetinId,
                 })
+
                     
             });
         });
@@ -203,19 +202,20 @@ const UserList = (props) => {
             <Link to="/Departments/Contacts/new">New Contact</Link>
             <br/>
             <button onClick = {LogOut}>LogOut</button>
-            <form onSubmit={zoomPost}>
+            {/* <form onSubmit={zoomPost}> */}
             <br/><br /><br/>
 
                 <Table style={{fontWeight: "bold"}} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                  <tbody style={{ border: "solid"}}>
-                  <TableRow style={{ backgroundColor: "black", color: "white"}}>
-                      <StyledTableCell/>
-                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Username</StyledTableCell>
-                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Email</StyledTableCell>
-                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Created On</StyledTableCell>
-                      <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Other Actions</StyledTableCell>
-                      <StyledTableCell/>
-                  </TableRow>
+                    <tbody style={{ border: "solid"}}>
+                    <TableRow style={{ backgroundColor: "black", color: "white"}}>
+                        <StyledTableCell/>
+                        <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Department</StyledTableCell>
+                        <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>First Name</StyledTableCell>
+                        <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Last Name</StyledTableCell>
+                        <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Email</StyledTableCell>
+                        <StyledTableCell style={{fontSize: "large", fontFamily: "Arial" }}>Actions</StyledTableCell>
+                        <StyledTableCell/>
+                    </TableRow>
 
                         {person.itinerays.map((itineray) => (
                             <tr key={itineray._id}>
@@ -223,25 +223,28 @@ const UserList = (props) => {
                                     handleTest(itineray.email);
                                 }}
                                 />
+                                <TableCell>{itineray.department}</TableCell>
                                 <TableCell>{itineray.firstName}</TableCell>
+                                <TableCell>{itineray.lastName}</TableCell>
                                 <TableCell>{itineray.email}</TableCell>
-                                <TableCell>{itineray.createdAt}</TableCell>
-                                <td>
-                                    <button
-                                        onClick={(e) => {
-                                            handleDelete(itineray._id);
-                                        }}
-                                        className="btn btn-sm btn-outline-danger mx-1"
-                                    >
-                                        Delete
-                                    </button>
-                                <Link style={{ marginLeft: "10px"}} to={`/Departments/Contacts/${itineray._id}`}>View</Link>
-                                </td>
+                                <TableCell>
+                                    <td>
+                                        <button
+                                            onClick={(e) => {
+                                                handleDelete(itineray._id);
+                                            }}
+                                            className="btn btn-sm btn-outline-danger mx-1"
+                                        >
+                                            Delete
+                                        </button>
+                                        <Link style={{ marginLeft: "10px"}} to={`/Departments/Contacts/${itineray._id}`}>View</Link>
+                                    </td>
+                                </TableCell>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-
+            <form onSubmit={zoomPost}>
                 <br/>
                 <br/>
                 <label>Topic: </label>

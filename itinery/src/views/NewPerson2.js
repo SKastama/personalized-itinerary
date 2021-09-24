@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, Link } from 'react-router-dom';
 import { FormControl } from '@mui/material';
 
 
@@ -53,6 +53,18 @@ const NewPerson2 = (props) => {
             });
     }
 
+    const LogOut = () =>{
+        axios
+            .post("http://localhost:8000/api/logout")
+            .then((res)=>{
+                console.log(res);
+                history.push("/Departments/admin");
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    }
+
     return (
 
         <ThemeProvider theme={theme}>
@@ -69,6 +81,9 @@ const NewPerson2 = (props) => {
                     {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar> */}
+                    <button onClick = {LogOut}>LogOut</button>
+                    <Link to="/Departments/Contacts">Home</Link>
+                    <br/>
                     <Typography component="h1" variant="h5">
                         Create New Contact:
                     </Typography>
