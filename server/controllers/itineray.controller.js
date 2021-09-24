@@ -143,23 +143,32 @@ module.exports = {
         console.log("update method executed");
         // , "url params:", req.params);
         const decodedJWT = jwt.decode(req.cookies.usertoken, { complete: true });
-        User.findByIdAndUpdate(
-            decodedJWT.payload._id, {
-                // req.body,
-                $set: { itinerays: req.params.id }
-            }
-                // { multi: true },
-                // {
-                //     runValidators: true,
-                //     new: true,
-                // })
-                .then((updateUser) => {
-                    res.json({ user: updateUser });
-                })
-                .catch((err) => {
-                    res.status(400).json(err);
-                })
+        User.findById(
+            decodedJWT.payload._id,
         )
+            .then((user) => {
+                const itineray = user.itinerays.id(req.params.id);
+                console.log(itineray.updatedAt)
+                itineray.department = req.body.department;
+                itineray.title = req.body.title;
+                itineray.firstName = req.body.firstName;
+                itineray.lastName = req.body.lastName;
+                itineray.phone = req.body.phone;
+                itineray.email = req.body.email;
+                console.log(itineray.updatedAt)
+                user.save()
+                    .then((_updatedUser) => {
+                        console.log(itineray.updatedAt)
+                        res.json(itineray)
+                    })
+                    .catch(err => {
+                        res.status(400).json(err);
+                    })
+
+            })
+            .catch((err) => {
+                res.status(400).json(err);
+            })
     },
 
     zoom(req, res) {
